@@ -3,9 +3,9 @@
   const host = window.location.host;
   
   if(host === 'api.devcomp.fun') {
-    if(path === '/msdl') {
+    if(path === '/soft') {
       // Load API data
-      fetch('/data/msdl.json')
+      fetch('/data/products.json')
         .then(res => res.json())
         .then(data => {
           data.timestamp = new Date().toISOString();
