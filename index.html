@@ -1,0 +1,13 @@
+<!-- index.html -->
+<script>
+  // Handle request ke /msdl
+  if(window.location.pathname === '/soft') {
+    window.addEventListener('DOMContentLoaded', async () => {
+      const data = await getMSDLData();
+      
+      // Set header JSON
+      document.write(`<pre>${JSON.stringify(data, null, 2)}</pre>`);
+      document.title = 'SOFTWARE API';
+    });
+  }
+</script>

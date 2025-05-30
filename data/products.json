@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "timestamp": "2025-05-30T12:00:00.000Z",
+  "results": [
+    {
+      "id": 1,
+      "name": "Visual Studio Code",
+      "url": "https://code.visualstudio.com"
+    },
+    {
+      "id": 2,
+      "name": "Node.js",
+      "url": "https://nodejs.org"
+    }
+  ]
+}

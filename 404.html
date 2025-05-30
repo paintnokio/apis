@@ -1,0 +1,10 @@
+<!-- 404.html -->
+<script>
+  // Redirect path /msdl ke index.html?path=/msdl
+  if(window.location.pathname === '/soft') {
+    window.location.href = '/index.html?path=/soft';
+  } else {
+    // Tampilkan halaman 404 biasa
+    document.body.innerHTML = '<h1>404 Not Found</h1>';
+  }
+</script>
