@@ -1,44 +1,54 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="description" content="Daftar Unduhan Software - Temukan dan unduh produk Opensource">
+
+    <!-- Metadata Sosial Media -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="og:site_name" content="Unduhan Opensource">
+    <meta property="og:title" content="Unduhan Opensource">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Unduh software Opensource langsung dari server resmi">
     <title>DevComp.fun - Developer Resources</title>
     <!-- Gunakan path absolut untuk semua aset -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    
+
     <!-- Load soft.js dengan path absolut -->
     <script src="/js/soft.js"></script>
 </head>
+
 <body>
     <header>
         <!-- Gunakan path absolut untuk gambar -->
         <img src="/img/cover.png" alt="DevComp.fun Cover" class="cover-img">
-        <h1>Welcome to apis.devcomp.fun</h1>
-        <p>API Endpoint for Developer Resources</p>
+        <h1>Welcome devcomp.fun</h1>
+        <p>Sumber Daya Pengembang</p>
     </header>
 
-    <main>
-        <!-- API Section -->
-        <section id="api-section">
-            <h2>Software API Endpoint</h2>
-            <p>Access our software list API:</p>
-            <div class="endpoint-box">
-                <code>GET https://apis.devcomp.fun/apis</code>
-                <button id="test-api">Test API</button>
-            </div>
-            <div id="api-response" class="api-response"></div>
-        </section>
+<main>
+    <!-- Sembunyikan API Section tapi tetap ada di DOM -->
+    <section id="api-section" style="display: none;">
+        <h2>Software Endpoint</h2>
+        <div class="endpoint-box">
+            <code>GET https://apis.devcomp.fun/</code>
+            <button id="test-api">Test API</button>
+        </div>
+        <div id="api-response" class="api-response"></div>
+    </section>
 
-        <!-- Products Section -->
-        <section id="products-section">
-            <h2>Available Resources</h2>
-            <div id="products-container" class="products-grid">
-                <!-- Products will be loaded by JavaScript -->
-            </div>
-        </section>
-    </main>
+    <!-- Products Section tetap ditampilkan -->
+    <section id="products-section">
+        <h2>Available Resources</h2>
+        <div id="products-container" class="products-grid">
+            <!-- Products akan di-load oleh JavaScript -->
+        </div>
+    </section>
+</main>
 
     <footer>
         <p>&copy; 2025 DevComp.fun | <a href="/LICENSE">License</a></p>
@@ -49,11 +59,11 @@
         document.getElementById('test-api').addEventListener('click', async () => {
             try {
                 const data = await getMSDLData();
-                
+
                 const responseEl = document.getElementById('api-response');
                 responseEl.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
             } catch (error) {
-                document.getElementById('api-response').innerHTML = 
+                document.getElementById('api-response').innerHTML =
                     `<p class="error">API Error: ${error.message}</p>`;
             }
         });
@@ -62,15 +72,15 @@
         window.addEventListener('DOMContentLoaded', async () => {
             try {
                 const data = await getMSDLData();
-                
+
                 const container = document.getElementById('products-container');
                 container.innerHTML = '';
-                
-                if(data.status === "error") {
+
+                if (data.status === "error") {
                     container.innerHTML = `<p class="error">${data.message}</p>`;
                     return;
                 }
-                
+
                 data.results.forEach(product => {
                     const productEl = document.createElement('div');
                     productEl.className = 'product-card';
@@ -78,15 +88,16 @@
                         <h3>${product.name}</h3>
                         <p>Category: ${product.category}</p>
                         <p>${product.description || 'No description available'}</p>
-                        <a href="${product.url}" target="_blank">Visit Website</a>
+                        <a href="${product.url}" target="_blank">Download</a>
                     `;
                     container.appendChild(productEl);
                 });
             } catch (error) {
-                document.getElementById('products-container').innerHTML = 
+                document.getElementById('products-container').innerHTML =
                     `<p class="error">Error loading resources: ${error.message}</p>`;
             }
         });
     </script>
 </body>
+
 </html>

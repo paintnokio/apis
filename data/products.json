@@ -4,13 +4,31 @@
   "results": [
     {
       "id": 1,
-      "name": "Visual Studio Code",
-      "url": "https://code.visualstudio.com"
+      "category": "Security",
+      "name": "Firewall App Blocker (fab) v.19",
+      "description": "Software gratis yang memudahkan kita untuk memblockir software dari akses internet",
+      "url": "https://pixeldrain.com/u/99WMdnTC"
     },
     {
       "id": 2,
-      "name": "Node.js",
-      "url": "https://nodejs.org"
+      "category": "Academic",
+      "description": "aplikasi yang membantu kamu dalam penyisipan, penulisan, dan pemformatan sitase atau citation",
+      "name": "Mendeley Desktop V1.19.5",
+      "url": "https://rb.gy/igoj5a"
+    },
+    {
+      "id": 3,
+      "category": "PDF Tools",
+      "description": "Program untuk mengedit PDF, convert PDF to Word, excel, Power point, membuat PDF",
+      "name": "Nitro Pdf Profesional V14.18.1.41",
+      "url": "https://pixeldrain.com/u/mZBcZ41Y"
+    },
+    {
+      "id": 4,
+      "category": "Utility",
+      "description": " Software utility yang berfungsi untuk membuat komputer kita terasa lebih cepat, tidak banyak JUNK alias sampah",
+      "name": "CCleaner Profesional Plus V6.36",
+      "url": "https://pixeldrain.com/u/zaW7uaYC"
     }
   ]
 }
