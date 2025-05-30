@@ -1,13 +1,99 @@
-<!-- index.html -->
-<script>
-  // Handle request ke /msdl
-  if(window.location.pathname === '/soft') {
-    window.addEventListener('DOMContentLoaded', async () => {
-      const data = await getMSDLData();
-      
-      // Set header JSON
-      document.write(`<pre>${JSON.stringify(data, null, 2)}</pre>`);
-      document.title = 'SOFTWARE API';
-    });
-  }
-</script>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevComp.fun - Developer Resources</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <img src="img/cover.png" alt="DevComp.fun Cover" class="cover-img">
+        <h1>Welcome to DevComp.fun</h1>
+        <p>Your source for developer tools and resources</p>
+    </header>
+
+    <main>
+        <section id="api-section">
+            <h2>MSDL API Endpoint</h2>
+            <p>Access our software list API:</p>
+            <div class="endpoint-box">
+                <code>GET https://devcomp.fun/apis/soft</code>
+                <button id="test-api">Test API</button>
+            </div>
+            <div id="api-response" class="api-response"></div>
+        </section>
+
+        <section id="products-section">
+            <h2>Featured Developer Tools</h2>
+            <div id="products-container" class="products-grid">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 DevComp.fun | <a href="LICENSE">License</a></p>
+    </footer>
+
+    <script src="js/soft.js"></script>
+    <script>
+        // Fungsi untuk memuat produk dari JSON
+        async function loadProducts() {
+            try {
+                const response = await fetch('data/products.json');
+                const data = await response.json();
+                
+                const container = document.getElementById('products-container');
+                container.innerHTML = '';
+                
+                data.results.forEach(product => {
+                    const productEl = document.createElement('div');
+                    productEl.className = 'product-card';
+                    productEl.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p>Category: ${product.category}</p>
+                        <a href="${product.url}" target="_blank">Visit Website</a>
+                    `;
+                    container.appendChild(productEl);
+                });
+            } catch (error) {
+                console.error('Failed to load products:', error);
+                document.getElementById('products-container').innerHTML = 
+                    '<p>Failed to load products. Please try again later.</p>';
+            }
+        }
+
+        // Fungsi untuk test API endpoint
+        document.getElementById('test-api').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/apis/soft');
+                const data = await response.json();
+                
+                const responseEl = document.getElementById('api-response');
+                responseEl.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('api-response').innerHTML = 
+                    `<p class="error">API Error: ${error.message}</p>`;
+            }
+        });
+
+        // Inisialisasi halaman
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+            
+            // Handle routing untuk API endpoint
+            if(window.location.pathname === '/apis/soft') {
+                fetch('data/products.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        data.timestamp = new Date().toISOString();
+                        document.write(JSON.stringify(data));
+                        document.title = 'SOFTWARE API';
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
