@@ -1,67 +1,112 @@
-// js/soft.js
-async function fetchMSDLData() {
-  try {
-    // Gunakan path absolut yang sesuai dengan subdomain
-    const response = await fetch('/data/products.json');
-    
-    // Validasi respons
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    // Periksa content-type
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      const text = await response.text();
-      throw new Error(`Expected JSON but got: ${contentType}. First 100 chars: ${text.substring(0, 100)}`);
-    }
-    
-    const data = await response.json();
-    
-    // Tambahkan timestamp dinamis
-    data.timestamp = new Date().toISOString();
-    
-    return data;
-  } catch (error) {
-    console.error('Error in fetchMSDLData:', error);
-    return {
-      status: "error",
-      message: "Failed to load data: " + error.message,
-      timestamp: new Date().toISOString()
-    };
+document.addEventListener("DOMContentLoaded", () => {
+  // Fungsi fetch data dari data/products.json
+  function fetchMSDLData() {
+    return fetch('data/products.json')
+      .then(response => {
+        if (!response.ok) {
+          return { status: "error", message: "Failed to load products.json" };
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.status !== "success") {
+          return { status: "error", message: "Data status not success" };
+        }
+        return { status: "success", products: data.results };
+      })
+      .catch(error => {
+        return { status: "error", message: error.message };
+      });
   }
-}
 
-// Fungsi untuk menangani endpoint /apis
-async function handleMSDLEndpoint() {
-  if (window.location.pathname === '/apis') {
-    try {
-      const data = await fetchMSDLData();
-      
-      // Set content-type header
-      const meta = document.createElement('meta');
-      meta.httpEquiv = "Content-Type";
-      meta.content = "application/json";
-      document.head.innerHTML = ''; // Clear existing head
-      document.head.appendChild(meta);
-      
-      // Set title
-      document.title = 'Softaware API - apis.devcomp.fun';
-      
-      // Tampilkan data
-      document.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-    } catch (error) {
-      document.body.innerHTML = `<pre>${JSON.stringify({
-        status: "error",
-        message: "Failed to process request",
-        error: error.message
-      }, null, 2)}</pre>`;
-    }
+  // Mode terang/gelap
+  const toggleButton = document.getElementById("mode-toggle");
+
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+  } else {
+    document.body.classList.add("light-mode");
   }
-}
 
-// Ekspos fungsi ke global scope
-window.getMSDLData = fetchMSDLData;
+  toggleButton.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    document.body.classList.toggle("light-mode");
+    const mode = document.body.classList.contains("dark-mode") ? "dark" : "light";
+    localStorage.setItem("theme", mode);
+  });
 
-// Jalankan handler endpoint saat halaman dimuat
-document.addEventListener('DOMContentLoaded', handleMSDLEndpoint);
+  // Pencarian Produk
+  const searchInput = document.getElementById("search-products");
+  const productList = document.getElementById("product-list");
+
+  fetchMSDLData().then((data) => {
+    if (data.status === "error") {
+      console.error("Error fetching product data:", data.message);
+      productList.innerHTML = "<li>Gagal memuat data produk.</li>";
+      return;
+    }
+
+    const products = data.products || [];
+    renderProductList(products);
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase();
+      const filtered = products.filter((product) =>
+        product.name.toLowerCase().includes(query)
+      );
+
+      if (filtered.length > 0) {
+        renderProductList(filtered);
+      } else {
+        productList.innerHTML = `<li>Produk tidak ditemukan.</li>`;
+      }
+    });
+  });
+
+  function renderProductList(products) {
+    productList.innerHTML = products
+      .map((product) => `<li><a href="detail.html?id=${product.id}">${product.name}</a></li>`)
+      .join("");
+  }
+
+  // Halaman Detail Produk
+  if (window.location.pathname.includes("detail.html")) {
+    const params = new URLSearchParams(window.location.search);
+    const productId = Number(params.get("id"));
+
+    // Tampilkan loader sementara
+    const productTitleEl = document.getElementById("product-title");
+    const productDescriptionEl = document.getElementById("product-description");
+    const downloadButtonEl = document.getElementById("download-button");
+
+    productTitleEl.textContent = "Memuat data produk...";
+    productDescriptionEl.textContent = "Silakan tunggu, data sedang dimuat.";
+    downloadButtonEl.style.display = "none"; // Sembunyikan tombol unduh sementara
+
+    fetchMSDLData()
+      .then((data) => {
+        if (data.status === "error") {
+          console.error("Error fetching product data:", data.message);
+          alert("Terjadi kesalahan saat mengambil data produk.");
+          window.location.href = "404.html";
+          return;
+        }
+
+        const product = data.products.find((p) => p.id === productId);
+        if (product) {
+          productTitleEl.textContent = product.name;
+          productDescriptionEl.textContent = product.description || "Deskripsi tidak tersedia.";
+          downloadButtonEl.href = product.url;
+          downloadButtonEl.style.display = "inline-block"; // Tampilkan tombol unduh
+        } else {
+          alert("Produk tidak ditemukan!");
+          window.location.href = "404.html";
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+        alert("Gagal memuat data produk. Silakan coba lagi nanti.");
+        window.location.href = "404.html";
+      });
+  }
+});

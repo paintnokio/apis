@@ -1,4 +1,9 @@
-/* css/style.css */
+/* Default Theme (Light Mode) */
+:root {
+    --background: #f5f7fa;
+    --text-color: #2d3748;
+}
+
 /* ===== BASE STYLES ===== */
 * {
     margin: 0;
@@ -7,21 +12,44 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Container Global */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
 body {
     background-color: #f5f7fa;
     color: #2d3748;
     line-height: 1.6;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 
+body.light-mode {
+    background-color: #f5f7fa;
+    color: #2d3748;
+}
+
+body.dark-mode {
+    background-color: #1a202c;
+    color: #e2e8f0;
+}
+
+
+button {
+    cursor: pointer;
+    padding: 10px;
+    background: linear-gradient(135deg, #6de78c 0%, #525c5b 100%);
+    color: rgba(255, 254, 254, 0.651);
+  }
+
+/* Header */
 header {
     text-align: center;
     margin-bottom: 30px;
     padding: 20px;
-    background: linear-gradient(135deg, #46e56e 0%, #3aede4 100%);
     border-radius: 12px;
+    background: linear-gradient(135deg, #46e56e 0%, #3aede4 100%);
     color: rgba(32, 22, 22, 0.651);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -47,74 +75,22 @@ h2 {
     padding-bottom: 8px;
 }
 
-/* ===== API SECTION ===== */
-#api-section {
-    background-color: white;
-    border-radius: 12px;
-    padding: 25px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.endpoint-box {
-    display: flex;
-    gap: 10px;
-    margin: 20px 0;
-    align-items: center;
-}
-
-.endpoint-box code {
-    flex-grow: 1;
-    padding: 12px 15px;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-family: 'Courier New', monospace;
-    font-size: 1rem;
-    overflow-x: auto;
-}
-
-button {
-    padding: 12px 24px;
-    background-color: #09ee27e3;
-    color: rgba(0, 0, 0, 0.938);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-button:hover {
-    background-color: #38ca81;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.api-response {
-    padding: 20px;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    margin-top: 20px;
-    min-height: 100px;
-    max-height: 400px;
-    overflow-y: auto;
-    font-family: monospace;
-    font-size: 0.9rem;
-    white-space: pre-wrap;
-}
-
-/* ===== PRODUCTS SECTION ===== */
+/* Products Section */
 #products-section {
     background-color: white;
     border-radius: 12px;
     padding: 25px;
     margin-bottom: 30px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+body.dark-mode #products-section {
+    background-color: #2d3748; /* gelap */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Grid untuk produk */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -122,31 +98,60 @@ button:hover {
     margin-top: 20px;
 }
 
+/* Kartu produk - mode terang */
 .product-card {
     background: linear-gradient(to bottom right, #ffffff 0%, #f1f5f9 100%);
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     padding: 20px;
     transition: all 0.3s ease;
+    color: #257017;
 }
 
+/* Kartu produk - mode gelap */
+body.dark-mode .product-card {
+    background: linear-gradient(to bottom right, #1a202c 0%, #2d3748 100%);
+    border: 1px solid #4a5568;
+    color: #a3bffa;
+}
+
+/* Hover kartu produk - mode terang */
 .product-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     border-color: #c7d2fe;
 }
 
+/* Hover kartu produk - mode gelap */
+body.dark-mode .product-card:hover {
+    border-color: #63b3ed;
+    box-shadow: 0 10px 15px -3px rgba(99, 179, 237, 0.6);
+}
+
+/* Judul produk */
 .product-card h3 {
     color: #257017;
     margin-bottom: 10px;
     font-size: 1.3rem;
 }
 
+/* Judul produk di dark mode */
+body.dark-mode .product-card h3 {
+    color: #90cdf4;
+}
+
+/* Deskripsi produk */
 .product-card p {
     color: #257017;
     margin-bottom: 15px;
 }
 
+/* Deskripsi produk di dark mode */
+body.dark-mode .product-card p {
+    color: #cbd5e0;
+}
+
+/* Link download - mode terang */
 .product-card a {
     display: inline-block;
     padding: 8px 16px;
@@ -158,12 +163,25 @@ button:hover {
     transition: all 0.2s ease;
 }
 
+/* Link download - mode gelap */
+body.dark-mode .product-card a {
+    background-color: #4a5568;
+    color: #90cdf4;
+}
+
+/* Hover link download - mode terang */
 .product-card a:hover {
     background-color: #46e569;
     color: white;
 }
 
-/* ===== SEARCH & UTILITY STYLES ===== */
+/* Hover link download - mode gelap */
+body.dark-mode .product-card a:hover {
+    background-color: #63b3ed;
+    color: white;
+}
+
+/* Search Bar */
 #search-products {
     width: 100%;
     padding: 12px 15px;
@@ -171,7 +189,9 @@ button:hover {
     border-radius: 8px;
     font-size: 1rem;
     margin-bottom: 20px;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+    background-color: #ffffff;
+    color: #2d3748;
 }
 
 #search-products:focus {
@@ -180,90 +200,31 @@ button:hover {
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
 }
 
-#quick-search {
-    text-align: center;
-    margin: 25px 0;
+/* Mode Gelap */
+body.dark-mode #search-products {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
 }
 
-#quick-search button {
-    padding: 10px 15px;
-    font-size: 0.9rem;
-    margin: 0 5px;
-    background-color: #94a3b8;
+body.dark-mode #search-products:focus {
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.2);
 }
 
-#quick-search button:hover {
-    background-color: #64748b;
-}
 
-.warning {
-    background-color: #fffbeb;
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 4px solid #f59e0b;
-    margin: 20px 0;
-    color: #92400e;
-}
-
-.quick-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-}
-
-.quick-actions button {
-    padding: 8px 15px;
-    font-size: 0.85rem;
-    background-color: #e2e8f0;
-    color: #4a5568;
-}
-
-.quick-actions button:hover {
-    background-color: #cbd5e1;
-}
-
-.table-responsive {
-    overflow-x: auto;
-    margin: 25px 0;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-}
-
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-th {
-    background-color: #f1f5f9;
-    color: #4f46e5;
-    font-weight: 600;
-}
-
-tr:hover {
-    background-color: #f8fafc;
-}
-
-/* ===== FOOTER ===== */
+/* Footer */
 footer {
+    background-color: var(--background);
+    color: var(--text-color);
     text-align: center;
-    padding: 25px;
-    margin-top: 40px;
-    background-color: #f1f5f9;
-    border-radius: 12px;
-    color: #64748b;
+    padding: 20px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 footer a {
-    color: #4f46e5;
+    color: var(--text-color);
     text-decoration: none;
     font-weight: 600;
 }
@@ -272,19 +233,16 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* ===== UTILITY CLASSES ===== */
-.hidden {
-    display: none;
+/* Mode Gelap */
+body.dark-mode footer {
+    background-color: #2d3748; /* Warna latar untuk mode gelap */
+    color: #e2e8f0;           /* Warna teks untuk mode gelap */
 }
 
-.error {
-    color: #e53e3e;
-    font-weight: 600;
-    padding: 10px;
-    background-color: #fff5f5;
-    border-radius: 6px;
-    margin: 10px 0;
+body.dark-mode footer a {
+    color: #63b3ed; /* Warna link untuk mode gelap */
 }
+
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
@@ -296,16 +254,118 @@ footer a:hover {
         font-size: 2rem;
     }
     
-    .endpoint-box {
-        flex-direction: column;
-    }
-    
-    button {
-        width: 100%;
-        margin-top: 10px;
-    }
-    
     .products-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Detail Produk */
+#product-detail {
+    background-color: var(--background);
+    color: var(--text-color);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+#product-detail .product-content {
+    width: 100%;
+}
+
+#product-title {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+#product-category {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+}
+
+#product-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
+.download-button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #46e569;
+    color: rgb(255, 255, 255);
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.download-button:hover {
+    background-color: #3abe56;
+}
+
+#product-detail-section {
+    background-color: var(--background);
+    color: var(--text-color);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+#product-description {
+    color: var(--text-color);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-top: 15px;
+}
+
+.download-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.download-link:hover {
+    background-color: var(--button-bg-hover);
+    color: var(--button-text-hover);
+}
+
+/* Mode Gelap */
+body.dark-mode #product-detail-section {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+
+/* Mode Gelap */
+body.dark-mode #product-description {
+    color: #e2e8f0; /* Warna teks terang untuk mode gelap */
+}
+
+body.dark-mode .download-link {
+    background-color: #4a5568;
+    color: #e2e8f0;
+}
+
+body.dark-mode .download-link:hover {
+    background-color: #63b3ed;
+    color: #ffffff;
 }

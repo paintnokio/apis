@@ -13,91 +13,97 @@
     <meta property="og:type" content="website">
     <meta property="og:description" content="Unduh software Opensource langsung dari server resmi">
     <title>DevComp.fun - Developer Resources</title>
-    <!-- Gunakan path absolut untuk semua aset -->
+
+    <!-- CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
-    <!-- Load soft.js dengan path absolut -->
+    <!-- JavaScript -->
     <script src="/js/soft.js"></script>
 </head>
 
 <body>
-    <header>
-        <!-- Gunakan path absolut untuk gambar -->
-        <img src="/img/cover.png" alt="DevComp.fun Cover" class="cover-img">
-        <h1>Welcome devcomp.fun</h1>
-        <p>Sumber Daya Pengembang</p>
-    </header>
+    <div class="container">
+        <header>
+            <img src="/img/cover.png" alt="DevComp.fun Cover" class="cover-img">
+            <h1>Welcome devcomp.fun</h1>
+            <button id="mode-toggle">Toggle Mode</button>
+            <p>Sumber Daya Pengembang</p>
+        </header>
 
-<main>
-    <!-- Sembunyikan API Section tapi tetap ada di DOM -->
-    <section id="api-section" style="display: none;">
-        <h2>Software Endpoint</h2>
-        <div class="endpoint-box">
-            <code>GET https://apis.devcomp.fun/</code>
-            <button id="test-api">Test API</button>
-        </div>
-        <div id="api-response" class="api-response"></div>
-    </section>
+        <main>
+            <input type="text" id="search-products" placeholder="Cari produk...">
+           <section id="products-section">
+                <h2>Daftar Software Terbaru</h2>
+                <ul id="products-list" class="products-grid"></ul>
+            </section>
+        </main>
 
-    <!-- Products Section tetap ditampilkan -->
-    <section id="products-section">
-        <h2>Available Resources</h2>
-        <div id="products-container" class="products-grid">
-            <!-- Products akan di-load oleh JavaScript -->
-        </div>
-    </section>
-</main>
+        <footer>
+            <p>&copy; 2025 DevComp.fun | <a href="/LICENSE">License</a></p>
+        </footer>
+    </div>
 
-    <footer>
-        <p>&copy; 2025 DevComp.fun | <a href="/LICENSE">License</a></p>
-    </footer>
+    
 
     <script>
-        // Fungsi untuk test API endpoint
-        document.getElementById('test-api').addEventListener('click', async () => {
-            try {
-                const data = await getMSDLData();
-
-                const responseEl = document.getElementById('api-response');
-                responseEl.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-            } catch (error) {
-                document.getElementById('api-response').innerHTML =
-                    `<p class="error">API Error: ${error.message}</p>`;
+        async function fetchProducts() {
+            const response = await fetch('data/products.json');
+            const data = await response.json();
+            if (data.status === "success") {
+                return data.results;
             }
-        });
+            throw new Error("Gagal memuat data produk.");
+        }
 
-        // Load produk saat halaman dimuat
-        window.addEventListener('DOMContentLoaded', async () => {
+        function renderProductList(products) {
+            const productsList = document.getElementById('products-list');
+            productsList.innerHTML = '';
+
+            products.forEach(product => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('product-item');
+                listItem.innerHTML = `
+                    <a href="product-detail.html?id=${product.id}" class="product-link">${product.name}</a>
+                `;
+                productsList.appendChild(listItem);
+            });
+        }
+
+        function renderProductList(products) {
+            const productsList = document.getElementById('products-list');
+            productsList.innerHTML = '';
+
+            products.forEach(product => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('product-item');
+                listItem.innerHTML = `
+                    <a href="product-detail.html?id=${product.id}" class="product-link">${product.name}</a>
+                `;
+                productsList.appendChild(listItem);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const data = await getMSDLData();
+                const products = await fetchProducts();
+                renderProductList(products);
 
-                const container = document.getElementById('products-container');
-                container.innerHTML = '';
-
-                if (data.status === "error") {
-                    container.innerHTML = `<p class="error">${data.message}</p>`;
-                    return;
-                }
-
-                data.results.forEach(product => {
-                    const productEl = document.createElement('div');
-                    productEl.className = 'product-card';
-                    productEl.innerHTML = `
-                        <h3>${product.name}</h3>
-                        <p>Category: ${product.category}</p>
-                        <p>${product.description || 'No description available'}</p>
-                        <a href="${product.url}" target="_blank">Download</a>
-                    `;
-                    container.appendChild(productEl);
+                const searchInput = document.getElementById('search-products');
+                searchInput.addEventListener('input', () => {
+                    const query = searchInput.value.toLowerCase();
+                    const filtered = products.filter(product =>
+                        product.name.toLowerCase().includes(query)
+                    );
+                    renderProductList(filtered);
                 });
             } catch (error) {
-                document.getElementById('products-container').innerHTML =
-                    `<p class="error">Error loading resources: ${error.message}</p>`;
+                document.getElementById('products-list').innerHTML = '<li>Gagal memuat daftar produk.</li>';
             }
         });
     </script>
+
 </body>
 
 </html>
