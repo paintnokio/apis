@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Halaman List Produk
   function renderProductList(products) {
     productList.innerHTML = products
       .map((product) => `<li><a href="detail.html?id=${product.id}">${product.name}</a></li>`)
